@@ -5,6 +5,7 @@
 #include "Utils.h"
 
 #include <cstdio>
+#include <conio.h>
 
 namespace ui {
   void Utils::gotoxy(const int x, const int y) {
@@ -25,4 +26,15 @@ namespace ui {
     printf("\x1B[2J\x1B[H");
     fflush(stdout);
   }
+
+  int Utils::get_key() {
+    return _getch();
+  }
+
+  void Utils::clear_line(int y) {
+    gotoxy(0, y);
+    printf("\x1B[2K");
+    fflush(stdout);
+  }
+
 } // ui

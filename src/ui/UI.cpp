@@ -5,7 +5,10 @@
 #include "UI.h"
 
 #include <cstdio>
+#include <cstdlib>
+#include <string.h>
 
+#include "Select.h"
 #include "Utils.h"
 
 namespace ui {
@@ -20,19 +23,23 @@ namespace ui {
     printf("  \\__\\___|_| |_|_|_|_|_||_\\__,_|_|   |_| |_\\__,_/__/_||_\\__\\__,_|_| \\__,_/__/\n\n");
   }
 
-  void UI::show_main_menu_options() {
-    Utils::color(Utils::PURPLE);
-    Utils::gotoxy(50, 12);
-    printf("1. Show decks");
-    Utils::gotoxy(50, 14);
-    printf("2. Import deck");
-    Utils::gotoxy(50, 16);
-    printf("3. Quit");
+  void UI::show_decks_title() {
+    Utils::gotoxy(50, 3);
+    Utils::color(Utils::Color::YELLOW);
+    printf("~ Available decks ~");
   }
 
-  void UI::show_main_menu() {
-    Utils::clear();
-    show_project_name();
-    show_main_menu_options();
+  void UI::show_no_decks() {
+    Utils::gotoxy(50, 5);
+    Utils::color(Utils::Color::RED);
+    printf("No decks available!");
   }
+
+  void UI::get_file_path(char *path, int *length) {
+    Utils::color(Utils::Color::WHITE);
+    printf("Input flashcards file path: ");
+    scanf("%s", path);
+    *length = static_cast<int>(strlen(path));
+  }
+
 } // GUI

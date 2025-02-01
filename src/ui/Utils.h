@@ -24,6 +24,8 @@ public:
   static void color(Color color);
   static void color();
   static void clear();
+  static int get_key();
+  static void clear_line(int y);
 };
 
 } // ui

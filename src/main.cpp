@@ -3,11 +3,19 @@
 
 #include "UI.h"
 #include "database/Database.h"
+#include "flashcards/Flashcards.h"
 
 int main() {
   db::Database db;
-  ui::UI::show_main_menu();
+  if (!db.is_connected()) {
+    printf("Flashcards database is not connected!\n");
+    return 1;
+  }
+
+  fc::Flashcards flashcards(db);
+  flashcards.show_main_menu();
 
   while (true) {}
+
   return 0;
 }

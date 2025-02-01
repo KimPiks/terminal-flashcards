@@ -9,13 +9,11 @@ namespace ui {
 
 
 class UI {
-private:
-  static void show_project_name();
-  static void show_main_menu_options();
-
 public:
-  static void show_main_menu();
-
+  static void show_project_name();
+  static void show_decks_title();
+  static void show_no_decks();
+  static void get_file_path(char* path, int* length);
 };
 
 } // gui
