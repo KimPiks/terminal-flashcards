@@ -5,6 +5,7 @@
 #include "Flashcards.h"
 
 #include <cstdlib>
+#include <string.h>
 
 #include "Database.h"
 #include "Select.h"
@@ -62,6 +63,14 @@ namespace fc {
     }
 
     int selected = ui::Select::show_select_menu(deck_names, decks.size(), 50, 8, 2, ui::Utils::PURPLE);
+    std::vector<data::Question> cards;
+    db.get_cards(decks[selected].deck_id, cards);
+
+    data::Deck deck;
+    strcpy(deck.name, decks[selected].name);
+    deck.questions = cards;
+
+    run_flashcards(deck);
   }
 
   void Flashcards::import_deck() {
@@ -77,5 +86,11 @@ namespace fc {
 
     show_decks();
   }
+
+  void Flashcards::run_flashcards(const data::Deck &deck) {
+    ui::Utils::clear();
+
+  }
+
 
 } // FC

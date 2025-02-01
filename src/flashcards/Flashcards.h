@@ -15,6 +15,7 @@ private:
   void show_main_menu_options();
   void show_decks();
   void import_deck();
+  void run_flashcards(const data::Deck& deck);
 
 public:
   Flashcards(const db::Database& db) : db(db) {}

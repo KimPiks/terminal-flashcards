@@ -52,6 +52,10 @@ namespace db {
 
   const char *INSERT_ANSWER_SQL = "INSERT INTO card_answers (card_id, answer, is_correct) VALUES (%d, '%s', %d);";
 
+  const char *SELECT_CARDS_BY_DECK_ID_SQL = "SELECT * FROM cards WHERE deck_id = %d;";
+
+  const char *SELECT_ANSWERS_BY_CARD_ID_SQL = "SELECT * FROM card_answers WHERE card_id = %d;";
+
 }
 
 #endif //SQL_H

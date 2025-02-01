@@ -133,5 +133,44 @@ namespace db {
     execute_sql(COMMIT_SQL);
   }
 
+  void Database::get_cards(const int deck_id, std::vector<data::Question> &questions) {
+    char selectCardsByDeckIdSql[256];
+    snprintf(selectCardsByDeckIdSql, sizeof(selectCardsByDeckIdSql), SELECT_CARDS_BY_DECK_ID_SQL, deck_id);
+    std::vector<std::unordered_map<std::string, std::string>> results;
+    execute_sql(selectCardsByDeckIdSql, results);
+
+    for (const auto& row : results) {
+      data::Question question{};
+      for (const auto& [key, value] : row) {
+        if (key == "question") {
+          snprintf(question.question, sizeof(question.question), "%s", value.c_str());
+        }
+
+        if (key == "card_id") {
+          int cardId = std::stoi(value);
+          char selectAnswersByCardIdSql[256];
+          snprintf(selectAnswersByCardIdSql, sizeof(selectAnswersByCardIdSql), SELECT_ANSWERS_BY_CARD_ID_SQL, cardId);
+          std::vector<std::unordered_map<std::string, std::string>> answersResults;
+          execute_sql(selectAnswersByCardIdSql, answersResults);
+
+          for (const auto& answerRow : answersResults) {
+            data::Answer answer{};
+            for (const auto& [answerKey, answerValue] : answerRow) {
+              if (answerKey == "answer") {
+                snprintf(answer.answer, sizeof(answer.answer), "%s", answerValue.c_str());
+              }
+
+              if (answerKey == "is_correct") {
+                answer.is_correct = answerValue == "1";
+              }
+            }
+            question.answers.push_back(answer);
+          }
+        }
+      }
+      questions.push_back(question);
+    }
+  }
+
 
 } // db

@@ -10,7 +10,7 @@
 
 namespace data {
   struct Deck {
-    char name[256];
+    char name[64];
     std::vector<Question> questions;
   };
 }

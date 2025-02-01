@@ -29,6 +29,7 @@ namespace db {
 
     bool is_connected() const;
     void get_decks(std::vector<models::Deck>& decks);
+    void get_cards(int deck_id, std::vector<data::Question>& questions);
     void insert_deck(const data::Deck& deck);
   };
 } // db
