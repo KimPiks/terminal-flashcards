@@ -48,6 +48,12 @@ namespace ui {
     printf("%s", question);
   }
 
+  void UI::show_question_number(const int number, const int total) {
+    Utils::gotoxy(1, 1);
+    Utils::color(Utils::Color::GRAY);
+    printf("%d/%d", number, total);
+  }
+
   void UI::show_points(const int correct, const int total) {
     Utils::clear();
     Utils::gotoxy(50, 5);

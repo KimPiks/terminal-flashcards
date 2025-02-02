@@ -94,9 +94,11 @@ namespace fc {
     std::shuffle(deck.questions.begin(), deck.questions.end(), std::mt19937(std::random_device()()));
     int correct_answers_count = 0;
 
+    int question_number = 1;
     for (const auto& card : deck.questions) {
       ui::Utils::clear();
       ui::UI::show_question(card.question);
+      ui::UI::show_question_number(question_number++, deck.questions.size());
 
       char* answers[card.answers.size()];
       for (size_t i = 0; i < card.answers.size(); i++) {
