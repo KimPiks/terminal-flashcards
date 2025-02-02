@@ -42,4 +42,17 @@ namespace ui {
     *length = static_cast<int>(strlen(path));
   }
 
+  void UI::show_question(const char *question) {
+    Utils::color(Utils::Color::WHITE);
+    Utils::gotoxy(50, 5);
+    printf("%s", question);
+  }
+
+  void UI::show_points(const int correct, const int total) {
+    Utils::clear();
+    Utils::gotoxy(50, 5);
+    Utils::color(Utils::Color::WHITE);
+    printf("You answered %d out of %d questions correctly!", correct, total);
+  }
+
 } // GUI

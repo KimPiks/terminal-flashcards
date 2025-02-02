@@ -1,11 +1,12 @@
 ﻿#include <cstdio>
-#include <sqlite3.h>
-
-#include "UI.h"
+#include <windows.h>
 #include "database/Database.h"
 #include "flashcards/Flashcards.h"
 
 int main() {
+  SetConsoleOutputCP(CP_UTF8);
+  SetConsoleCP(CP_UTF8);
+
   db::Database db;
   if (!db.is_connected()) {
     printf("Flashcards database is not connected!\n");

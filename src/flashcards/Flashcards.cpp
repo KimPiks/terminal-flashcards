@@ -4,8 +4,11 @@
 
 #include "Flashcards.h"
 
+#include <algorithm>
+#include <conio.h>
 #include <cstdlib>
-#include <string.h>
+#include <cstring>
+#include <random>
 
 #include "Database.h"
 #include "Select.h"
@@ -87,9 +90,46 @@ namespace fc {
     show_decks();
   }
 
-  void Flashcards::run_flashcards(const data::Deck &deck) {
-    ui::Utils::clear();
+  void Flashcards::run_flashcards(data::Deck &deck) {
+    std::shuffle(deck.questions.begin(), deck.questions.end(), std::mt19937(std::random_device()()));
+    int correct_answers_count = 0;
 
+    for (const auto& card : deck.questions) {
+      ui::Utils::clear();
+      ui::UI::show_question(card.question);
+
+      char* answers[card.answers.size()];
+      for (size_t i = 0; i < card.answers.size(); i++) {
+        answers[i] = strdup(card.answers[i].answer);
+      }
+
+      int x = 50;
+      int y = 8;
+      int space = 2;
+      int selected = ui::Select::show_select_menu(answers, card.answers.size(), x, y, space, ui::Utils::PURPLE);
+      if (card.answers[selected].is_correct) {
+        ui::Utils::gotoxy(x, y + selected * space);
+        ui::Utils::color(ui::Utils::GREEN);
+        printf("✓ %s", card.answers[selected].answer);
+        correct_answers_count++;
+      } else {
+        ui::Utils::gotoxy(x, y + selected * space);
+        ui::Utils::color(ui::Utils::RED);
+        printf("✗ %s", card.answers[selected].answer);
+
+        for (int i = 0; i < card.answers.size(); i++) {
+          if (card.answers[i].is_correct) {
+            ui::Utils::gotoxy(x, y + i * space);
+            ui::Utils::color(ui::Utils::GREEN);
+            printf("✓ %s", card.answers[i].answer);
+          }
+        }
+      }
+
+      getch();
+    }
+
+    ui::UI::show_points(correct_answers_count, deck.questions.size());
   }
 
 

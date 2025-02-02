@@ -14,6 +14,8 @@ public:
   static void show_decks_title();
   static void show_no_decks();
   static void get_file_path(char* path, int* length);
+  static void show_question(const char* question);
+  static void show_points(int correct, int total);
 };
 
 } // gui
