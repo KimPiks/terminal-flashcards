@@ -16,7 +16,5 @@ int main() {
   fc::Flashcards flashcards(db);
   flashcards.show_main_menu();
 
-  while (true) {}
-
   return 0;
 }
