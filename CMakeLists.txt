@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.28)
 project(terminal_flashcards)
 
 set(CMAKE_CXX_STANDARD 26)
