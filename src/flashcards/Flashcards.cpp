@@ -58,7 +58,10 @@ namespace fc {
 
     // If there are no decks, show message and return
     if (decks.empty()) {
+      ui::Utils::gotoxy(0, 2);
       ui::UI::show_no_decks();
+      ui::Utils::get_key();
+      show_main_menu();
       return;
     }
 
