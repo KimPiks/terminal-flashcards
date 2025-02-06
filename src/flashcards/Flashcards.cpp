@@ -154,9 +154,14 @@ namespace fc {
       getch();
     }
 
+    // Show summary
     ui::Utils::clear();
     ui::Utils::gotoxy(0, 0);
     ui::UI::show_deck_summary(correct_answers_count, deck.questions.size());
+
+    // Wait for any key to continue
+    getch();
+    show_main_menu();
   }
 
 

@@ -46,7 +46,8 @@ namespace ui {
 
   void UI::show_deck_summary(const int correct, const int total) {
     Utils::color(Utils::Color::WHITE);
-    printf("You answered %d out of %d questions correctly!", correct, total);
+    printf("You answered %d out of %d questions correctly!\n\n", correct, total);
+    printf("Press any key to continue...");
   }
 
 } // GUI
