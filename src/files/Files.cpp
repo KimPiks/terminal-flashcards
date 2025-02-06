@@ -9,7 +9,7 @@
 #include <string>
 
 namespace files {
-  void Files::load_deck(const char *path, data::Deck* deck) {
+  void Files::load_deck(const std::string &path, data::Deck* deck) {
     std::ifstream file;
     file.open(path);
 
@@ -32,7 +32,7 @@ namespace files {
           std::string answer;
           std::getline(file, answer);
 
-          data::Answer a;
+          data::Answer a{};
           if (answer[0] == '+') {
             a.is_correct = true;
             strcpy(a.answer, answer.c_str() + 1);

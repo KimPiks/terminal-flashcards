@@ -4,13 +4,23 @@
 
 #ifndef FILES_H
 #define FILES_H
+#include <string>
+
 #include "data/Deck.h"
 
 namespace files {
 
+/**
+ * Class responsible for loading and saving files.
+ */
 class Files {
 public:
-  static void load_deck(const char* path, data::Deck* deck);
+  /**
+   * Load deck from file.
+   * @param path Path to the file.
+   * @param deck Deck to load.
+   */
+  static void load_deck(const std::string &path, data::Deck* deck);
 };
 
 } // files

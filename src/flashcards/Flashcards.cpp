@@ -13,6 +13,7 @@
 #include "Database.h"
 #include "Select.h"
 #include "UI.h"
+#include "Utils.h"
 #include "files/Files.h"
 #include "models/Deck.h"
 
@@ -26,8 +27,8 @@ namespace modelss {
 
 namespace fc {
   void Flashcards::show_main_menu_options() {
-    char* options[] = {"Show decks", "Import deck", "Quit"};
-    int selected = ui::Select::show_select_menu(options, 3, 50, 12, 2, ui::Utils::PURPLE);
+    const std::vector<std::string> options = {"Show decks", "Import deck", "Quit"};
+    const int selected = ui::Select::show_select_menu(options, 0, 3, 1);
 
     switch (selected) {
       case 0:
@@ -52,86 +53,110 @@ namespace fc {
     ui::Utils::clear();
     ui::UI::show_decks_title();
 
+    // Get all decks from database
     std::vector<db::models::Deck> decks;
     db.get_decks(decks);
 
+    // If there are no decks, show message and return
     if (decks.empty()) {
       ui::UI::show_no_decks();
       return;
     }
 
-    char* deck_names[decks.size()];
+    // Copy deck names to vector
+    std::vector<std::string> deck_names(decks.size());
     for (size_t i = 0; i < decks.size(); i++) {
       deck_names[i] = decks[i].name;
     }
 
-    int selected = ui::Select::show_select_menu(deck_names, decks.size(), 50, 8, 2, ui::Utils::PURPLE);
+    // Show select menu
+    const int selected = ui::Select::show_select_menu(deck_names, 0, 3, 1);
+
+    // Get cards from selected deck
     std::vector<data::Question> cards;
     db.get_cards(decks[selected].deck_id, cards);
 
+    // Create deck
     data::Deck deck;
     strcpy(deck.name, decks[selected].name);
     deck.questions = cards;
 
+    // Run flashcards
     run_flashcards(deck);
   }
 
   void Flashcards::import_deck() {
     ui::Utils::clear();
 
-    char filePath[256];
-    int length;
-    ui::UI::get_file_path(filePath, &length);
-    data::Deck deck;
-    files::Files::load_deck(filePath, &deck);
+    // Get file path from user
+    std::string file_path;
+    ui::UI::get_file_path(&file_path);
 
+    // Load deck from file
+    data::Deck deck;
+    files::Files::load_deck(file_path, &deck);
+
+    // Insert deck to database
     db.insert_deck(deck);
 
     show_decks();
   }
 
   void Flashcards::run_flashcards(data::Deck &deck) {
-    std::shuffle(deck.questions.begin(), deck.questions.end(), std::mt19937(std::random_device()()));
-    int correct_answers_count = 0;
+    // Shuffle questions
+    std::ranges::shuffle(deck.questions, std::mt19937(std::random_device()()));
 
+    int correct_answers_count = 0;
     int question_number = 1;
     for (const auto& card : deck.questions) {
+      // Show question
       ui::Utils::clear();
-      ui::UI::show_question(card.question);
       ui::UI::show_question_number(question_number++, deck.questions.size());
+      printf(" ");
+      ui::UI::show_question(card.question);
 
-      char* answers[card.answers.size()];
+      // Copy answers to vector
+      std::vector<std::string> answers(card.answers.size());
       for (size_t i = 0; i < card.answers.size(); i++) {
-        answers[i] = strdup(card.answers[i].answer);
+        answers[i] = ui::Utils::get_answer_letter(i) + std::string(") ") + strdup(card.answers[i].answer);
       }
 
-      int x = 50;
-      int y = 8;
-      int space = 2;
-      int selected = ui::Select::show_select_menu(answers, card.answers.size(), x, y, space, ui::Utils::PURPLE);
+      const int x = 0;
+      const int y = 3;
+      const int space = 1;
+      const int selected = ui::Select::show_select_menu(answers, x, y, space);
+
+      ui::Utils::clear_line(y + selected * space);
+      ui::Utils::gotoxy(x, y + selected * space);
+
       if (card.answers[selected].is_correct) {
-        ui::Utils::gotoxy(x, y + selected * space);
+        // Show correct answer
         ui::Utils::color(ui::Utils::GREEN);
         printf("✓ %s", card.answers[selected].answer);
         correct_answers_count++;
       } else {
-        ui::Utils::gotoxy(x, y + selected * space);
+        // Show incorrect answer
         ui::Utils::color(ui::Utils::RED);
         printf("✗ %s", card.answers[selected].answer);
 
+        // Show correct answer
         for (int i = 0; i < card.answers.size(); i++) {
           if (card.answers[i].is_correct) {
             ui::Utils::gotoxy(x, y + i * space);
             ui::Utils::color(ui::Utils::GREEN);
+            ui::Utils::clear_line(y + i * space);
             printf("✓ %s", card.answers[i].answer);
           }
         }
       }
 
+      // Wait for any key to continue
       getch();
     }
 
-    ui::UI::show_points(correct_answers_count, deck.questions.size());
+    ui::Utils::clear();
+    ui::Utils::gotoxy(0, 0);
+    ui::UI::show_deck_summary(correct_answers_count, deck.questions.size());
   }
 
 

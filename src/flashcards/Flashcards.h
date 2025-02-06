@@ -8,17 +8,47 @@
 
 namespace fc {
 
+/**
+ * Class that represents the flashcards main logic.
+ */
 class Flashcards {
 private:
+  /**
+   * Database instance.
+   */
   db::Database db;
 
+  /**
+   * Shows the main menu options.
+   */
   void show_main_menu_options();
+
+  /**
+   * Shows decks menu.
+   */
   void show_decks();
+
+  /**
+   * Shows the import deck menu.
+   */
   void import_deck();
+
+  /**
+   * Runs the flashcards.
+   * @param deck Deck to run flashcards.
+   */
   void run_flashcards(data::Deck& deck);
 
 public:
+  /**
+   * Constructor.
+   * @param db Database instance.
+   */
   Flashcards(const db::Database& db) : db(db) {}
+
+  /**
+   * Shows the main menu of application.
+   */
   void show_main_menu();
 };
 

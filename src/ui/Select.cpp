@@ -3,28 +3,33 @@
 //
 
 #include "Select.h"
+#include "Utils.h"
 
 #include <cstdio>
 
 namespace ui {
-  int Select::show_select_menu(char* options[], int size, int x, int y, int space, Utils::Color color) {
+  int Select::show_select_menu(const std::vector<std::string> &options, const int x, const int y, const int space) {
     int selected = 0;
     int key = 0;
     while (key != 13) {
-      Utils::color(color);
-      for (int i = 0; i < size; i++) {
-        Utils::clear_line(y + i * space);
+      Utils::color();
+
+      for (int i = 0; i < options.size(); i++) {
+        Utils::clear_line(y + i * space); // Clear previous option before printing new one
         Utils::gotoxy(x, y + i * space);
+
         if (i == selected) {
-          Utils::color(Utils::BLUE);
-          printf("> %s", options[i]);
+          Utils::color(Utils::GRAY);
         } else {
-          Utils::color(color);
-          printf("%s", options[i]);
+          Utils::color();
         }
+
+        printf("%s", options[i].c_str());
       }
+
+      // Change selected option
       key = Utils::get_key();
-      if (key == 80 && selected < size - 1) {
+      if (key == 80 && selected < options.size() - 1) {
         selected++;
       } else if (key == 72 && selected > 0) {
         selected--;

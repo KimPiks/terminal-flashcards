@@ -37,4 +37,9 @@ namespace ui {
     fflush(stdout);
   }
 
+  char Utils::get_answer_letter(const int index) {
+    return 'a' + index;
+  }
+
+
 } // ui
