@@ -20,6 +20,8 @@ namespace db {
   }
 
   Database::~Database() {
+    if (!is_connected()) return;
+    
     if (sqlite3_close(db) != SQLITE_OK) {
       fprintf(stderr, "Can't close database: %s\n", sqlite3_errmsg(db));
     }

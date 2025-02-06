@@ -11,7 +11,12 @@ namespace ui {
   int Select::show_select_menu(const std::vector<std::string> &options, const int x, const int y, const int space) {
     int selected = 0;
     int key = 0;
+#ifdef _WIN32
     while (key != 13) {
+#else
+    while (key != 10) {
+#endif
+
       Utils::color();
 
       for (int i = 0; i < options.size(); i++) {
@@ -29,11 +34,21 @@ namespace ui {
 
       // Change selected option
       key = Utils::get_key();
+      ui::Utils::gotoxy(10, 10);
+#ifdef _WIN32
       if (key == 80 && selected < options.size() - 1) {
         selected++;
       } else if (key == 72 && selected > 0) {
         selected--;
       }
+#else
+      if (key == 66 && selected < options.size() - 1) {
+        selected++;
+      } else if (key == 65 && selected > 0) {
+        selected--;
+      }
+#endif
+
     }
     return selected;
   }

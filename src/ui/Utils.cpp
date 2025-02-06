@@ -5,7 +5,13 @@
 #include "Utils.h"
 
 #include <cstdio>
+
+#ifdef _WIN32
 #include <conio.h>
+#else
+#include <termios.h>
+#include <unistd.h>
+#endif
 
 namespace ui {
   void Utils::gotoxy(const int x, const int y) {
@@ -28,7 +34,19 @@ namespace ui {
   }
 
   int Utils::get_key() {
+#ifdef _WIN32
     return _getch();
+#else
+    struct termios oldt, newt;
+    int ch;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    return ch;
+#endif
   }
 
   void Utils::clear_line(int y) {

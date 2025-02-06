@@ -5,7 +5,6 @@
 #include "Flashcards.h"
 
 #include <algorithm>
-#include <conio.h>
 #include <cstdlib>
 #include <cstring>
 #include <random>
@@ -111,6 +110,7 @@ namespace fc {
     int max_repeated_questions = 0;
 
     int correct_answers_count = 0;
+    int correct_first_attempt_answers_count = 0;
     while (!deck.questions.empty() || !repeated_questions.empty()) {
       data::Question card = deck.questions.front();
       bool repeated = false;
@@ -149,8 +149,9 @@ namespace fc {
         printf("✓ %s", card.answers[selected].answer);
 
         if (!repeated) {
-          correct_answers_count++;
+          correct_first_attempt_answers_count++;
         }
+        correct_answers_count++;
       } else {
         // Show incorrect answer
         ui::Utils::color(ui::Utils::RED);
@@ -176,16 +177,16 @@ namespace fc {
       }
 
       // Wait for any key to continue
-      getch();
+      ui::Utils::get_key();
     }
 
     // Show summary
     ui::Utils::clear();
     ui::Utils::gotoxy(0, 0);
-    ui::UI::show_deck_summary(correct_answers_count, deck_size, max_repeated_questions);
+    ui::UI::show_deck_summary(correct_first_attempt_answers_count, deck_size, max_repeated_questions);
 
     // Wait for any key to continue
-    getch();
+    ui::Utils::get_key();
     show_main_menu();
   }
 
