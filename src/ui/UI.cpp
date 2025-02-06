@@ -5,6 +5,8 @@
 #include "UI.h"
 
 #include <cstdio>
+#include <iostream>
+
 #include "Utils.h"
 
 namespace ui {
@@ -26,7 +28,7 @@ namespace ui {
   void UI::get_file_path(std::string* path) {
     Utils::color(Utils::Color::WHITE);
     printf("Input flashcards file path: ");
-    scanf("%s", path);
+    std::getline(std::cin, *path);
   }
 
   void UI::show_question(const std::string &question) {

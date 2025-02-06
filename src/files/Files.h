@@ -14,6 +14,13 @@ namespace files {
  * Class responsible for loading and saving files.
  */
 class Files {
+private:
+  /**
+   * Validates file format.
+   * @param path Path to the file.
+   */
+  static void validate_file(const std::string &path);
+
 public:
   /**
    * Load deck from file.
