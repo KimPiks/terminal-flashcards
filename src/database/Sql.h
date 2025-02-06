@@ -5,6 +5,10 @@
 #ifndef SQL_H
 #define SQL_H
 
+/**
+ * SQL queries used in the application.
+ */
+
 namespace db {
   const char *CREATE_DECKS_TABLE_SQL = "CREATE TABLE IF NOT EXISTS decks ("
                                      "deck_id INTEGER PRIMARY KEY AUTOINCREMENT,"

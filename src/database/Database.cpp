@@ -29,8 +29,7 @@ namespace db {
     return db != nullptr;
   }
 
-
-  void Database::execute_sql(const char *sql) {
+  void Database::execute_sql(const char *sql) const {
     if (!is_connected()) {
       fprintf(stderr, "Database is not connected!\n");
       return;
@@ -43,7 +42,7 @@ namespace db {
     }
   }
 
-  void Database::execute_sql(const char *sql, std::vector<std::unordered_map<std::string, std::string>>& results) {
+  void Database::execute_sql(const char *sql, std::vector<std::unordered_map<std::string, std::string>>& results) const {
     if (!is_connected()) {
       fprintf(stderr, "Database is not connected!\n");
       return;
@@ -76,14 +75,14 @@ namespace db {
     sqlite3_finalize(stmt);
   }
 
-  void Database::create_tables() {
+  void Database::create_tables() const {
     this->execute_sql(CREATE_DECKS_TABLE_SQL);
     this->execute_sql(CREATE_CARDS_TABLE_SQL);
     this->execute_sql(CREATE_ANSWERS_TABLE_SQL);
     this->execute_sql(CREATE_PROGRESS_TABLE_SQL);
   }
 
-  void Database::get_decks(std::vector<models::Deck>& decks) {
+  void Database::get_decks(std::vector<models::Deck>& decks) const {
     std::vector<std::unordered_map<std::string, std::string>> results;
 
     this->execute_sql(SELECT_ALL_DECKS_SQL, results);
@@ -101,7 +100,7 @@ namespace db {
     }
   }
 
-  void Database::insert_deck(const data::Deck &deck) {
+  void Database::insert_deck(const data::Deck &deck) const {
     execute_sql(BEGIN_TRANSACTION_SQL);
 
     char insertDeckSql[256];
@@ -133,7 +132,7 @@ namespace db {
     execute_sql(COMMIT_SQL);
   }
 
-  void Database::get_cards(const int deck_id, std::vector<data::Question> &questions) {
+  void Database::get_cards(const int deck_id, std::vector<data::Question> &questions) const {
     char selectCardsByDeckIdSql[256];
     snprintf(selectCardsByDeckIdSql, sizeof(selectCardsByDeckIdSql), SELECT_CARDS_BY_DECK_ID_SQL, deck_id);
     std::vector<std::unordered_map<std::string, std::string>> results;
