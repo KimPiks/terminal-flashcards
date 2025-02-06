@@ -34,19 +34,25 @@ namespace ui {
     printf("%s", question.c_str());
   }
 
-  void UI::show_question_number(const int number, const int total) {
+  void UI::show_number_of_correct_answers(const int correct, const int total, const int incorrect) {
     Utils::color(Utils::Color::GRAY);
-    printf("%d/%d", number, total);
+    printf("Correct: ");
+    Utils::color(Utils::Color::GREEN);
+    printf("%d", correct);
+    Utils::color(Utils::Color::GRAY);
+    printf(" | Incorrect: ");
+    Utils::color(Utils::Color::RED);
+    printf("%d", incorrect);
+    Utils::color(Utils::Color::GRAY);
+    printf(" | Left: ");
+    Utils::color(Utils::Color::WHITE);
+    printf("%d", total - correct);
   }
 
-  void UI::show_points(const int correct, const int total) {
+  void UI::show_deck_summary(const int correct, const int total, const int repeated) {
     Utils::color(Utils::Color::WHITE);
-    printf("You answered %d out of %d questions correctly!", correct, total);
-  }
-
-  void UI::show_deck_summary(const int correct, const int total) {
-    Utils::color(Utils::Color::WHITE);
-    printf("You answered %d out of %d questions correctly!\n\n", correct, total);
+    printf("You answered %d out of %d questions correctly!\n", correct, total);
+    printf("Repeated questions: %d\n\n", repeated);
     printf("Press any key to continue...");
   }
 

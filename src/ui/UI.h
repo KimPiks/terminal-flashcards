@@ -41,25 +41,18 @@ public:
   static void show_question(const std::string &question);
 
   /**
-   * Shows question number.
-   * @param number Number of question.
-   * @param total Total number of questions.
-   */
-  static void show_question_number(int number, int total);
-
-  /**
-   * Shows message with number of correct answers.
+   * Shows number of correct answers.
    * @param correct Number of correct answers.
    * @param total Total number of questions.
    */
-  static void show_points(int correct, int total);
+  static void show_number_of_correct_answers(int correct, int total, int incorrect);
 
   /**
    * Shows deck summary screen.
    * @param correct Number of correct answers.
    * @param total Total number of questions.
    */
-  static void show_deck_summary(int correct, int total);
+  static void show_deck_summary(int correct, int total, int repeated);
 };
 
 } // gui

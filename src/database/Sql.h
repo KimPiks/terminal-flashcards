@@ -33,15 +33,6 @@ namespace db {
                                          "FOREIGN KEY (card_id) REFERENCES cards(id)"
                                          ");";
 
-  const char *CREATE_PROGRESS_TABLE_SQL = "CREATE TABLE IF NOT EXISTS progress ("
-                                          "progress_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                          "card_id INTEGER NOT NULL,"
-                                          "deferred_until DATETIME,"
-                                          "is_mastered BOOLEAN NOT NULL,"
-                                          "created_at DATETIME DEFAULT CURRENT_TIMESTAMP,"
-                                          "FOREIGN KEY (card_id) REFERENCES cards(id)"
-                                          ");";
-
   const char *SELECT_ALL_DECKS_SQL = "SELECT * FROM decks;";
 
   const char *BEGIN_TRANSACTION_SQL = "BEGIN TRANSACTION;";

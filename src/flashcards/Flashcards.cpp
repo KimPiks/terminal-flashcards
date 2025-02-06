@@ -105,14 +105,28 @@ namespace fc {
   void Flashcards::run_flashcards(data::Deck &deck) {
     // Shuffle questions
     std::ranges::shuffle(deck.questions, std::mt19937(std::random_device()()));
+    const int deck_size = deck.questions.size();
+
+    std::vector<data::Question> repeated_questions;
+    int max_repeated_questions = 0;
 
     int correct_answers_count = 0;
-    int question_number = 1;
-    for (const auto& card : deck.questions) {
+    while (!deck.questions.empty() || !repeated_questions.empty()) {
+      data::Question card = deck.questions.front();
+      bool repeated = false;
+      if (deck.questions.empty()) {
+        if (repeated_questions.size() > max_repeated_questions) {
+          max_repeated_questions = repeated_questions.size();
+        }
+
+        card = repeated_questions.front();
+        repeated = true;
+      }
+
       // Show question
       ui::Utils::clear();
-      ui::UI::show_question_number(question_number++, deck.questions.size());
-      printf(" ");
+      ui::UI::show_number_of_correct_answers(correct_answers_count, deck_size, repeated_questions.size());
+      printf("\n\n");
       ui::UI::show_question(card.question);
 
       // Copy answers to vector
@@ -122,7 +136,7 @@ namespace fc {
       }
 
       const int x = 0;
-      const int y = 3;
+      const int y = 5;
       const int space = 1;
       const int selected = ui::Select::show_select_menu(answers, x, y, space);
 
@@ -133,7 +147,10 @@ namespace fc {
         // Show correct answer
         ui::Utils::color(ui::Utils::GREEN);
         printf("✓ %s", card.answers[selected].answer);
-        correct_answers_count++;
+
+        if (!repeated) {
+          correct_answers_count++;
+        }
       } else {
         // Show incorrect answer
         ui::Utils::color(ui::Utils::RED);
@@ -148,6 +165,14 @@ namespace fc {
             printf("✓ %s", card.answers[i].answer);
           }
         }
+
+        // Add incorrect answered question to the end of the deck
+        repeated_questions.push_back(card);
+      }
+      if (repeated) {
+        repeated_questions.erase(repeated_questions.begin());
+      } else {
+        deck.questions.erase(deck.questions.begin());
       }
 
       // Wait for any key to continue
@@ -157,7 +182,7 @@ namespace fc {
     // Show summary
     ui::Utils::clear();
     ui::Utils::gotoxy(0, 0);
-    ui::UI::show_deck_summary(correct_answers_count, deck.questions.size());
+    ui::UI::show_deck_summary(correct_answers_count, deck_size, max_repeated_questions);
 
     // Wait for any key to continue
     getch();

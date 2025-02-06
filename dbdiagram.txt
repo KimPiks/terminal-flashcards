@@ -18,13 +18,5 @@ Table card_answers {
   is_correct boolean
 }
 
-Table card_progress {
-  progress_id integer
-  card_id integer
-  deferred_until datetime
-  is_mastered boolean
-}
-
 Ref: cards.deck_id > decks.deck_id
 Ref: card_answers.card_id > cards.card_id
-Ref: card_progress.card_id - cards.card_id

@@ -79,7 +79,6 @@ namespace db {
     this->execute_sql(CREATE_DECKS_TABLE_SQL);
     this->execute_sql(CREATE_CARDS_TABLE_SQL);
     this->execute_sql(CREATE_ANSWERS_TABLE_SQL);
-    this->execute_sql(CREATE_PROGRESS_TABLE_SQL);
   }
 
   void Database::get_decks(std::vector<models::Deck>& decks) const {
